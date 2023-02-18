@@ -15,7 +15,7 @@ async def on_ready():
 
 prefix = '$'
 
-playwords = ["play"]
+playwords = ["play", "start", "game"]
 
 
 @client.event
