@@ -17,6 +17,6 @@ def generateImage(prompt):
 
     # Save the image
     url = response["data"][0]["url"]
-    urllib.request.urlretrieve(url, f"images/{prompt}.png")
+    urllib.request.urlretrieve(url, f"1.png")
 
-
+generateImage("tree")
