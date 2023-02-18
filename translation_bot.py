@@ -12,7 +12,7 @@ async def on_ready():
     print(f'We have logged in as {client.user}')
 prefix = '$'
 
-playwords = ["play"]
+playwords = ["play", "start", "game"]
 
 @client.event
 async def on_message(message):
