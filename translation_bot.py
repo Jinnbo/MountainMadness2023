@@ -20,6 +20,7 @@ prefix = '$'
 
 playwords = ["play", "start", "game"]
 drawwords = ["draw"]
+leaderwords = ["leaderboard"]
 
 
 @client.event
@@ -27,6 +28,7 @@ async def on_message(message):
     global right_answer
     global attemptNum
     global emojiSave
+    global leaderBoard
     if message.author == client.user:
         return
     if message.content.startswith(prefix):
@@ -42,6 +44,11 @@ async def on_message(message):
             await message.channel.send(
                 f"Guess the phrase from the given emojis: {emojiSave}")
             attemptNum = 0
+            # Setup leaderboard if it dosnt exist
+            try:
+                leaderBoard
+            except NameError:
+                leaderBoard = {}
 
         elif prompt[0] in drawwords:
             if len(prompt) == 1:
@@ -51,13 +58,35 @@ async def on_message(message):
                 msg = message.content[len(prompt[0]):].strip(" ")
                 generateImage.generateImage(msg)
                 await message.channel.send(file=discord.File("1.png"))
+        elif prompt[0] in leaderwords:
+            try:
+                leaderBoard
+            except NameError:
+                await message.channel.send('No winners have been recorded yet!')
+            else:
+                await message.channel.send('Current Leaderboard:')
+                for key, val in leaderBoard.items():
+                    await message.channel.send(f"   <@{key}>: {val}")
     else:
-        if right_answer is not None:
+        try:
+            right_answer
+        except NameError:
+            print()
+        else:
             if right_answer != "":
                 if message.content.lower().strip() == right_answer.strip():
                     await message.channel.send('Correct')
                     right_answer = ""
                     attemptNum = -1
+                    # Get username of user that guessed it correct
+                    # winnerName = f"{message.author.name}#{message.author.discriminator}"
+                    winnerName = message.author.id
+                    if winnerName in leaderBoard:
+                        leaderBoard.update(
+                            {winnerName: leaderBoard[winnerName]})
+                    else:
+                        leaderBoard.update({winnerName: 1})
+
                 elif attemptNum == 5:
                     await message.channel.send(f"You ran out of guesses! The correct answer was: {right_answer.strip()}")
                     right_answer = ""
