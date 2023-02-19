@@ -28,7 +28,6 @@ TransliterationLlama is Discord bot that has a fun and interactive take on langu
 - $draw [prompt] to get a drawing of the prompt
 
 
-
 ## Discord Bot Invite Link
 Add [here](https://discord.com/api/oauth2/authorize?client_id=1076599326622625913&permissions=8&scope=bot)
 
