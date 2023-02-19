@@ -2,8 +2,10 @@ import os
 import openai
 import requests
 
-openai.organization = "org-CwEqJy6peUJwJURd46VnFBPF"
-openai.api_key = "API-KEY"
+# openai.organization = "org-CwEqJy6peUJwJURd46VnFBPF"
+with open('token.txt') as f:
+    lines = f.readlines()
+openai.api_key = lines[2].strip()
 
 
 def emojiTrans(input):

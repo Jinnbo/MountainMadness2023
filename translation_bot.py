@@ -2,6 +2,7 @@
 
 import discord
 import emojify
+import generateImage
 intents = discord.Intents.default()
 intents.message_content = True
 
@@ -11,11 +12,14 @@ global right_answer
 
 @client.event
 async def on_ready():
+    global right_answer
+    right_answer = ""
     print(f'We have logged in as {client.user}')
 
 prefix = '$'
 
 playwords = ["play", "start", "game"]
+drawwords = ["draw"]
 
 
 @client.event
@@ -23,21 +27,27 @@ async def on_message(message):
     global right_answer
     if message.author == client.user:
         return
-
     if message.content.startswith(prefix):
         message.content = message.content[len(prefix):]
         arguments = message.content.split(" ")
+        prompt = arguments
         if arguments[0] in playwords:
             await message.channel.send('Starting game!')
-            print(arguments)
             right_answer = emojify.parseJSON(
                 emojify.generatePhrase(), 0).lower().strip(".?,<>!@#$%^&*()")
-            print(right_answer)
             emojis = emojify.parseJSON(emojify.emojiTrans(
                 right_answer), 1)
-            print(emojis)
             await message.channel.send(
                 f"Guess the phrase from the given emojis: {emojis}")
+
+        elif prompt[0] in drawwords:
+            if len(prompt) == 1:
+                await message.channel.send('please enter an image to be drawn')
+            else:
+                await message.channel.send('Drawing')
+                msg = message.content[len(prompt[0]):].strip(" ")
+                generateImage.generateImage(msg)
+                await message.channel.send(file=discord.File("1.png"))
     else:
         if right_answer is not None:
             if right_answer != "":
@@ -55,5 +65,5 @@ async def on_message(message):
 with open('token.txt') as f:
     lines = f.readlines()
 
-TOKEN = lines[0]
+TOKEN = lines[0].strip()
 client.run(TOKEN)

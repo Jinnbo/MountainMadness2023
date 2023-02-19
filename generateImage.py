@@ -4,9 +4,10 @@ import urllib.request
 # Get the api token
 with open('token.txt') as f:
     lines = f.readlines()
-openai.api_key = lines[1]
+openai.api_key = lines[1].strip()
 
 # Generate the image
+
 
 def generateImage(prompt):
     response = openai.Image.create(
@@ -19,4 +20,4 @@ def generateImage(prompt):
     url = response["data"][0]["url"]
     urllib.request.urlretrieve(url, f"1.png")
 
-generateImage("tree")
+# generateImage("tree")
