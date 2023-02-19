@@ -26,6 +26,7 @@ drawwords = ["draw"]
 async def on_message(message):
     global right_answer
     global attemptNum
+    global emojiSave
     if message.author == client.user:
         return
     if message.content.startswith(prefix):
@@ -36,10 +37,10 @@ async def on_message(message):
             await message.channel.send('Starting game!')
             right_answer = emojify.parseJSON(
                 emojify.generatePhrase(), 0).lower().strip(".?,<>!@#$%^&*()")
-            emojis = emojify.parseJSON(emojify.emojiTrans(
+            emojiSave = emojify.parseJSON(emojify.emojiTrans(
                 right_answer), 1)
             await message.channel.send(
-                f"Guess the phrase from the given emojis: {emojis}")
+                f"Guess the phrase from the given emojis: {emojiSave}")
             attemptNum = 0
 
         elif prompt[0] in drawwords:
@@ -66,6 +67,7 @@ async def on_message(message):
                     # Generate a hint?
                     tmpHint = emojify.parseJSON(
                         emojify.generateHint(right_answer), 0).strip("!").strip()
+                    await message.channel.send(f"Emojis: {emojiSave}")
                     await message.channel.send(f"Hint: {tmpHint}")
                     attemptNum += 1
 
