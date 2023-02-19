@@ -21,5 +21,17 @@ TransliterationLlama is Discord bot that has a fun and interactive take on langu
 
 <br>
 
+## Manual
+- $help to see the list of commands
+- $play to start the Emoji Game
+- $leaderboard to show the ammount of wins from each user
+- $draw [prompt] to get a drawing of the prompt
+
+
+
 ## Discord Bot Invite Link
 Add [here](https://discord.com/api/oauth2/authorize?client_id=1076599326622625913&permissions=8&scope=bot)
+
+## Discord Test Server
+Join [here](https://discord.gg/3T9UeD3T)
+
