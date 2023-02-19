@@ -29,6 +29,10 @@ async def on_message(message):
     global emojiSave
     if message.author == client.user:
         return
+    
+    if message.content.startswith("$help"):
+      await message.channel.send('Commands: \n  `$play` \n   `$draw {prompt}`')
+
     if message.content.startswith(prefix):
         message.content = message.content[len(prefix):]
         arguments = message.content.split(" ")
