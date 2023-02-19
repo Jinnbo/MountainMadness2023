@@ -25,6 +25,7 @@ drawwords = ["draw"]
 @client.event
 async def on_message(message):
     global right_answer
+    global attemptNum
     if message.author == client.user:
         return
     if message.content.startswith(prefix):
@@ -39,6 +40,7 @@ async def on_message(message):
                 right_answer), 1)
             await message.channel.send(
                 f"Guess the phrase from the given emojis: {emojis}")
+            attemptNum = 0
 
         elif prompt[0] in drawwords:
             if len(prompt) == 1:
@@ -54,12 +56,18 @@ async def on_message(message):
                 if message.content.lower().strip() == right_answer.strip():
                     await message.channel.send('Correct')
                     right_answer = ""
+                    attemptNum = -1
+                elif attemptNum == 5:
+                    await message.channel.send(f"You ran out of guesses! The correct answer was: {right_answer.strip()}")
+                    right_answer = ""
+                    attemptNum = -1
                 else:
                     await message.channel.send('Wrong')
                     # Generate a hint?
                     tmpHint = emojify.parseJSON(
                         emojify.generateHint(right_answer), 0).strip("!").strip()
                     await message.channel.send(f"Hint: {tmpHint}")
+                    attemptNum += 1
 
 
 with open('token.txt') as f:
