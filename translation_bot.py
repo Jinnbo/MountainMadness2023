@@ -2,6 +2,8 @@
 
 import discord
 import emojify
+import generateImage
+
 intents = discord.Intents.default()
 intents.message_content = True
 
@@ -16,7 +18,7 @@ async def on_ready():
 prefix = '$'
 
 playwords = ["play", "start", "game"]
-
+drawwords = ["draw", "generate"]
 
 @client.event
 async def on_message(message):
@@ -27,15 +29,25 @@ async def on_message(message):
     if message.content.startswith(prefix):
         message.content = message.content[len(prefix):]
         arguments = message.content.split(" ")
+
+        if arguments[0] in drawwords:
+            if len(arguments) == 1:
+                await message.channel.send('please enter an image to be drawn')
+            else:
+                await message.channel.send('Drawing')
+                msg = message.content[len(arguments[0]):].strip(" ")
+                arguments(msg)
+                generateImage.generateImage(msg)
+                await message.channel.send(file=discord.File("1.png"))
+
         if arguments[0] in playwords:
             await message.channel.send('Starting game!')
-            print(arguments)
             right_answer = emojify.parseJSON(
                 emojify.generatePhrase(), 0).lower().strip(".?,<>!@#$%^&*()")
-            print(right_answer)
+            # print(right_answer)
             emojis = emojify.parseJSON(emojify.emojiTrans(
                 right_answer), 1)
-            print(emojis)
+            # print(emojis)
             await message.channel.send(
                 f"Guess the phrase from the given emojis: {emojis}")
     else:
